@@ -1,0 +1,44 @@
+version: '3'
+services:
+  mstats-nginx:
+    container_name: "mstats-nginx"
+    build:
+      context: ./docker/nginx
+    depends_on:
+      - mstats-app
+    ports:
+      - 5959:80
+    volumes:
+      - ./:/src
+
+  mstats-app:
+    container_name: "mstats-app"
+    build:
+      context: ./docker/php
+    depends_on:
+      - mstats-mysql
+    ports:
+      - 5173:5173
+    volumes:
+      - ./:/src
+      - /src/node_modules
+      - /src/vendor
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+
+  mstats-mysql:
+    image: mysql:8.0.37
+    command: --max_allowed_packet=32505856
+    container_name: "mstats-mysql"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mstats
+    ports:
+      - 13306:3306
+
+  mstats-redis:
+    image: redis:alpine
+    container_name: "mstats-redis"
+    ports:
+      - 16379:6379
