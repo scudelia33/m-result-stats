@@ -13,11 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // カッコ内でソートしてからコミットする
+        $this->call([
+            MatchCategorySeeder::class,
+            MatchInformationSeeder::class,
+            MatchScheduleSeeder::class,
+            PlayerAffiliationSeeder::class,
+            PlayerSeeder::class,
+            SeasonSeeder::class,
+            TeamSeeder::class,
         ]);
     }
 }
