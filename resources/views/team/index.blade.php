@@ -12,8 +12,8 @@
         <caption>チーム一覧</caption>
         <thead>
             <tr>
-                <th>ID</th>
-                <th scope="col">チーム名</th>
+                <th scope="col">@sortablelink('team_id', 'ID')</th>
+                <th scope="col">@sortablelink('team_name', 'チーム名')</th>
             </tr>
         </thead>
         <tbody>

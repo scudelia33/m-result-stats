@@ -10,7 +10,7 @@ class TeamController extends Controller
 {
     public function index ()
     {
-        $teams = Team::all();
+        $teams = Team::sortable()->get();
         return View('team.index',
             compact('teams')
         );
