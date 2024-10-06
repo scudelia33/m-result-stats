@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // カッコ内でソートしてからコミットする
         $this->call([
             MatchCategorySeeder::class,
+            MatchInformationSeeder::class,
             MatchScheduleSeeder::class,
             PlayerAffiliationSeeder::class,
             PlayerSeeder::class,
