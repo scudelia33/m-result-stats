@@ -12,6 +12,20 @@ use Illuminate\Database\Eloquent\Builder;
 trait MstatsFunctionsTrait
 {
     /**
+     * 順位1-4を取得するSQLを生成
+     *
+     * @param Builder $query
+     */
+    public function generationSqlOfRank(Builder $query)
+    {
+        // 順位1-4を取得するSQLを生成
+        for ($i = 1; $i < 5; $i++) {
+            $column = "COUNT(CASE WHEN `rank` = {$i} THEN `rank` ELSE null END) AS rank{$i}";
+            $query->selectRaw($column);
+        }
+    }
+
+    /**
      * 表示用の最終試合日を取得
      *
      * @param int $seasonId シーズンID
