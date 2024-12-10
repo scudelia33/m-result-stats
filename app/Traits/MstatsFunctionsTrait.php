@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\MatchSchedule;
+use App\Models\PlayerAffiliation;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -35,5 +36,22 @@ trait MstatsFunctionsTrait
         }
         $converted = date_create_from_format('Y-m-d', $date)->format('Y/m/d');
         return " {$converted}時点";
+    }
+
+    /**
+     * 結合用の成績所属テーブルの定義を返す
+     *
+     * @param int $seasonId シーズンID
+     * @return 結合用の成績所属テーブルの定義
+     */
+    public function getDefinitionOfPlayerAffiliation(int $seasonId)
+    {
+        // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
+        return PlayerAffiliation::select(
+            'player_id as player_id_pa',
+            'team_id',
+        )
+        ->equalSeasonId($seasonId)
+        ;
     }
 }
