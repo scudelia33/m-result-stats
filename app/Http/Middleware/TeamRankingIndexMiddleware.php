@@ -7,7 +7,6 @@ use App\Enums\CheckBox;
 use App\Models\CarriedOverPoint;
 use App\Models\MatchCategory;
 use App\Models\MatchResult;
-use App\Models\PlayerAffiliation;
 use App\Models\QualifyingLine;
 use App\Models\Season;
 use App\Traits\CommonFunctionsTrait;
@@ -53,13 +52,7 @@ class TeamRankingIndexMiddleware
         // カテゴリ内チームポイントの取得
         $teamPointInCategory = (function () use ($request) {
             // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
-            $playerAffiliation = PlayerAffiliation::select(
-                'player_id as player_id_pa',
-                'team_id',
-                'season_id',
-            )
-            ->equalSeasonId($request->season_id)
-            ;
+            $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($request->season_id);
 
             // サブクエリー用のチームランキング
             $teamRankings = MatchResult::select(

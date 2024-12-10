@@ -9,7 +9,6 @@ use App\Models\MatchCategory;
 use App\Models\MatchInformation;
 use App\Models\MatchResult;
 use App\Models\MatchSchedule;
-use App\Models\PlayerAffiliation;
 use App\Models\Season;
 use App\Models\Team;
 use App\Traits\CommonFunctionsTrait;
@@ -63,13 +62,7 @@ class TeamStatsIndexMiddleware
         // 1.チームID/試合日毎のポイントを取得
         $teamPointsPerMatchDate = (function () use ($request) {
             // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
-            $playerAffiliation = PlayerAffiliation::select(
-                'player_id as player_id_pa',
-                'team_id',
-                'season_id',
-            )
-            ->equalSeasonId($request->season_id)
-            ;
+            $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($request->season_id);
 
             // 試合日でグルーピングするために、結合用の試合情報テーブルの定義
             $matchInformation = MatchInformation::select(
@@ -120,13 +113,7 @@ class TeamStatsIndexMiddleware
         // 3.試合していない日付のレコードの追加
         $noMatchDates = (function () use ($request) {
             // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
-            $playerAffiliation = PlayerAffiliation::select(
-                'player_id as player_id_pa',
-                'team_id',
-                'season_id',
-            )
-            ->equalSeasonId($request->season_id)
-            ;
+            $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($request->season_id);
 
             // 試合日でグルーピングするために、結合用の試合情報テーブルの定義
             $matchInformation = MatchInformation::select(
