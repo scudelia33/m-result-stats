@@ -66,10 +66,7 @@ class TeamRankingIndexMiddleware
             )
             ->when(true, function (Builder $query) {
                 // 順位1-4を取得するSQLを生成
-                for ($i = 1; $i < 5; $i++) {
-                    $column = "COUNT(CASE WHEN `rank` = {$i} THEN `rank` ELSE null END) AS rank{$i}";
-                    $query->selectRaw($column);
-                }
+                $this->generationSqlOfRank($query);
             })
             ->joinSub($playerAffiliation, 'pa', function (JoinClause $join) {
                 $join->on('player_id', '=', 'pa.player_id_pa');
