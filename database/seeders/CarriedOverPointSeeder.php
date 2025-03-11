@@ -98,7 +98,7 @@ class CarriedOverPointSeeder extends Seeder
             ['season_id' => 5, 'match_category_id' => 3, 'team_id' => 2, 'carried_over_point' => 145.2,],
             ['season_id' => 5, 'match_category_id' => 3, 'team_id' => 4, 'carried_over_point' => 86.4,],
             ['season_id' => 5, 'match_category_id' => 3, 'team_id' => 5, 'carried_over_point' => 133.3,],
-            ['season_id' => 5, 'match_category_id' => 3, 'team_id' => 7, 'carried_over_point' => 87.9,],
+            ['season_id' => 5, 'match_category_id' => 3, 'team_id' => 7, 'carried_over_point' => 86.9,],
             ['season_id' => 6, 'match_category_id' => 1, 'team_id' => 1, 'carried_over_point' => 0,],
             ['season_id' => 6, 'match_category_id' => 1, 'team_id' => 2, 'carried_over_point' => 0,],
             ['season_id' => 6, 'match_category_id' => 1, 'team_id' => 3, 'carried_over_point' => 0,],
