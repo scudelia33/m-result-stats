@@ -133,10 +133,10 @@ class CarriedOverPointSeeder extends Seeder
             ['season_id' => 7, 'match_category_id' => 2, 'team_id' => 6, 'carried_over_point' => 169.9,],
             ['season_id' => 7, 'match_category_id' => 2, 'team_id' => 7, 'carried_over_point' => 165.2,],
             ['season_id' => 7, 'match_category_id' => 2, 'team_id' => 9, 'carried_over_point' => 240.6,],
-            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 0, 'carried_over_point' => 0,],
-            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 0, 'carried_over_point' => 0,],
-            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 0, 'carried_over_point' => 0,],
-            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 0, 'carried_over_point' => 0,],
+            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 1, 'carried_over_point' => 357.4,],
+            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 6, 'carried_over_point' => 256.5,],
+            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 7, 'carried_over_point' => -4.9,],
+            ['season_id' => 7, 'match_category_id' => 3, 'team_id' => 9, 'carried_over_point' => 313.4,],
         ];
         CarriedOverPoint::insert($data);
     }
