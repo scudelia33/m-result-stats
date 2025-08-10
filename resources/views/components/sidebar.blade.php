@@ -1,11 +1,15 @@
 <button
-    class="btn btn-light"
+    class="btn btn-dark bg-transparent border-0"
     data-bs-toggle="offcanvas"
     data-bs-target="#offcanvasTop"
     aria-controls="offcanvasTop"
->サイドバーの表示</button>
+    aria-label="サイドバーの表示"
+    style="box-shadow:none;"
+>
+    <i class="bi bi-list" style="font-size: 1.5rem;"></i>
+</button>
 
-<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+<div class="offcanvas offcanvas-start sidebar-narrow" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasTopLabel">サイドメニュー</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="閉じるe"></button>
