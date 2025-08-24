@@ -29,7 +29,6 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
 RUN node --version
 RUN npm --version
-RUN npm install bootstrap-icons --save
 
 WORKDIR /src
 ADD . /src/storage
