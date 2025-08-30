@@ -21,3 +21,6 @@ yarn-error.log
 /.zed
 mysql/
 *.log
+
+# ビルドで自動生成されるファイル
+src/public/hot
