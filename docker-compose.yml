@@ -9,7 +9,7 @@ services:
     ports:
       - 8102:80
     volumes:
-      - ./:/src
+      - ./src:/src  # Laravel アプリを /src にマウント
 
   mstats-app:
     container_name: "mstats-app"
@@ -20,20 +20,20 @@ services:
     ports:
       - 5173:5173
     volumes:
-      - ./:/src
+      - ./src:/src
       - /src/node_modules
       - /src/vendor
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
 
   mstats-mysql:
-    image: mysql:8.0.37
+    image: mariadb:latest  # 最新安定版を使用
     command: --max_allowed_packet=32505856
     container_name: "mstats-mysql"
     volumes:
       - ./docker/mysql:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=mstats
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=mstats
       - TZ=Asia/Tokyo
     ports:
       - 13306:3306
