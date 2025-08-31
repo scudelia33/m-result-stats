@@ -23,6 +23,7 @@ class SeasonSeeder extends Seeder
             ['season_id' => 5, 'season_name' => '2022-23',],
             ['season_id' => 6, 'season_name' => '2023-24',],
             ['season_id' => 7, 'season_name' => '2024-25',],
+            ['season_id' => 8, 'season_name' => '2025-26',],
         ];
         Season::insert($data);
     }
