@@ -29,6 +29,8 @@ class QualifyingLineSeeder extends Seeder
             ['season_id' => 6, 'match_category_id' => 2, 'qualifying_line_team_rank' => 4,],
             ['season_id' => 7, 'match_category_id' => 1, 'qualifying_line_team_rank' => 6,],
             ['season_id' => 7, 'match_category_id' => 2, 'qualifying_line_team_rank' => 4,],
+            ['season_id' => 8, 'match_category_id' => 1, 'qualifying_line_team_rank' => 6,],
+            ['season_id' => 8, 'match_category_id' => 2, 'qualifying_line_team_rank' => 4,],
         ];
         QualifyingLine::insert($data);
     }
