@@ -63,6 +63,13 @@ class PlayerSeeder extends Seeder
             ['player_id' => 45, 'player_last_name' => '丸山', 'player_first_name' => '奏子',],
             ['player_id' => 46, 'player_last_name' => '魚谷', 'player_first_name' => '侑未',],
             ['player_id' => 47, 'player_last_name' => '東城', 'player_first_name' => 'りお',],
+            ['player_id' => 48, 'player_last_name' => '永井', 'player_first_name' => '孝典',],
+            ['player_id' => 49, 'player_last_name' => '阿久津', 'player_first_name' => '翔太',],
+            ['player_id' => 50, 'player_last_name' => '下石', 'player_first_name' => '戟',],
+            ['player_id' => 51, 'player_last_name' => '石井', 'player_first_name' => '一馬',],
+            ['player_id' => 52, 'player_last_name' => '三浦', 'player_first_name' => '智博',],
+            ['player_id' => 53, 'player_last_name' => '逢川', 'player_first_name' => '恵夢',],
+            ['player_id' => 54, 'player_last_name' => 'HIRO', 'player_first_name' => '柴田',],
         ];
         Player::insert($data);
     }

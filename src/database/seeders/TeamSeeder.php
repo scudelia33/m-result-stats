@@ -25,6 +25,7 @@ class TeamSeeder extends Seeder
             ['team_id' => 7, 'team_name' => 'TEAM雷電', 'team_name_shortened' => '雷電', 'team_color' => 'fedf00', 'team_color_to_text' => 'cbb30f', 'team_color_to_graph' => 'fedf00',],
             ['team_id' => 8, 'team_name' => 'BEAST X', 'team_name_shortened' => 'BEAST', 'team_color' => '144324', 'team_color_to_text' => '144324', 'team_color_to_graph' => '189116',],
             ['team_id' => 9, 'team_name' => 'U-NEXT Pirates', 'team_name_shortened' => 'Pirates', 'team_color' => '008fd0', 'team_color_to_text' => '008fd0', 'team_color_to_graph' => '008fd0',],
+            ['team_id' => 10, 'team_name' => 'EARTH JETS', 'team_name_shortened' => 'JETS', 'team_color' => '268053', 'team_color_to_text' => '268053', 'team_color_to_graph' => '268053',],
         ];
         Team::insert($data);
     }
