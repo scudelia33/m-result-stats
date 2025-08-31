@@ -32,7 +32,7 @@
         </ul>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a href="{{ route('player-ranking') }}">{{ __('PlayerRanking') }}</a>
+                <a href="{{ route('season-player-ranking') }}">{{ __('SeasonPlayerRanking') }}</a>
             </li>
         </ul>
         <ul class="nav nav-pills flex-column mb-auto">

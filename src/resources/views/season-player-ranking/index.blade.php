@@ -1,6 +1,6 @@
 <x-main>
     <x-slot:title>
-        {{ __('PlayerRanking') }}
+        {{ __('SeasonPlayerRanking') }}
     </x-slot>
 
     {{-- 検索条件 --}}
@@ -14,7 +14,7 @@
 
     {{-- 検索結果に対する見出し --}}
     <x-search-result-headline
-    text-center="{{ __('PlayerRanking') }}"
+    text-center="{{ __('SeasonPlayerRanking') }}"
     :text-end="$request->matchLastDateDisplay"
     />
 

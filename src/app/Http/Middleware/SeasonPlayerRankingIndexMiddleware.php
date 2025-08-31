@@ -15,7 +15,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PlayerRankingIndexMiddleware
+class SeasonPlayerRankingIndexMiddleware
 {
     use CommonFunctionsTrait;
     use MstatsFunctionsTrait;
