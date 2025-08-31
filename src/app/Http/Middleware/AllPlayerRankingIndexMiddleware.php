@@ -41,16 +41,9 @@ class AllPlayerRankingIndexMiddleware
             'matchCategories' => MatchCategory::get(),
         ]);
 
-        // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
-        $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($request->season_id);
-
         // オール選手ランキングの取得
         $allPlayerRankings = MatchResult::with([
             'player',
-            'playerAffiliation' => function (HasOne $query) use ($request) {
-                $query->equalSeasonId($request->season_id);
-            },
-            'playerAffiliation.team',
         ])
         ->select(
             'player_id',
@@ -67,9 +60,6 @@ class AllPlayerRankingIndexMiddleware
         ->when(true, function (Builder $query) {
             // 順位1-4を取得するSQLを生成
             $this->generationSqlOfRank($query);
-        })
-        ->joinSub($playerAffiliation, 'pa', function (JoinClause $join) {
-            $join->on('player_id', '=', 'pa.player_id_pa');
         })
         ->whereHas('matchInformation.matchSchedule', function (Builder $query) use ($request) {
             $query->equalSeasonId($request->season_id); // シーズンでの絞り込み

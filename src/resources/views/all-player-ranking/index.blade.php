@@ -30,9 +30,6 @@
                 'text-center',
             ])>{{ __('PlayerName') }}</th>
             <th @class([
-                'text-center',
-            ])>{{ __('TeamName') }}</th>
-            <th @class([
                 'text-end',
             ])>{{ __('Point') }}</th>
             <th @class([
@@ -60,8 +57,6 @@
                 <td @class([
                     'text-center',
                 ])>{{ $allPlayerRankings->player->player_name }}</td>
-                {{-- チーム名 --}}
-                <x-team-name :team-name="$allPlayerRankings->playerAffiliation->team->team_name" :team-color="$allPlayerRankings->playerAffiliation->team->team_color_to_text" />
                 {{-- ポイント --}}
                 <x-point :point="$allPlayerRankings->sum_point" />
                 {{-- トップ率 --}}
