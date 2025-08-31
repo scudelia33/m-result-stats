@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\MatchSchedule;
+use App\Models\PlayerAffiliation;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -10,6 +11,20 @@ use Illuminate\Database\Eloquent\Builder;
  */
 trait MstatsFunctionsTrait
 {
+    /**
+     * 順位1-4を取得するSQLを生成
+     *
+     * @param Builder $query
+     */
+    public function generationSqlOfRank(Builder $query)
+    {
+        // 順位1-4を取得するSQLを生成
+        for ($i = 1; $i < 5; $i++) {
+            $column = "COUNT(CASE WHEN `rank` = {$i} THEN `rank` ELSE null END) AS rank{$i}";
+            $query->selectRaw($column);
+        }
+    }
+
     /**
      * 表示用の最終試合日を取得
      *
@@ -35,5 +50,22 @@ trait MstatsFunctionsTrait
         }
         $converted = date_create_from_format('Y-m-d', $date)->format('Y/m/d');
         return " {$converted}時点";
+    }
+
+    /**
+     * 結合用の成績所属テーブルの定義を返す
+     *
+     * @param int $seasonId シーズンID
+     * @return 結合用の成績所属テーブルの定義
+     */
+    public function getDefinitionOfPlayerAffiliation(int $seasonId)
+    {
+        // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
+        return PlayerAffiliation::select(
+            'player_id as player_id_pa',
+            'team_id',
+        )
+        ->equalSeasonId($seasonId)
+        ;
     }
 }

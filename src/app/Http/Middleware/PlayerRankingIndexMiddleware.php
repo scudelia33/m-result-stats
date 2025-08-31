@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Enums\BlankInList;
 use App\Models\MatchCategory;
 use App\Models\MatchResult;
-use App\Models\PlayerAffiliation;
 use App\Models\Season;
 use App\Traits\CommonFunctionsTrait;
 use App\Traits\MstatsFunctionsTrait;
@@ -43,13 +42,7 @@ class PlayerRankingIndexMiddleware
         ]);
 
         // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
-        $playerAffiliation = PlayerAffiliation::select(
-            'player_id as player_id_pa',
-            'team_id',
-            'season_id',
-        )
-        ->equalSeasonId($request->season_id)
-        ;
+        $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($request->season_id);
 
         // チームランキングの取得
         $teamRankings = MatchResult::with([
@@ -73,10 +66,7 @@ class PlayerRankingIndexMiddleware
         )
         ->when(true, function (Builder $query) {
             // 順位1-4を取得するSQLを生成
-            for ($i = 1; $i < 5; $i++) {
-                $column = "COUNT(CASE WHEN `rank` = {$i} THEN `rank` ELSE null END) AS rank{$i}";
-                $query->selectRaw($column);
-            }
+            $this->generationSqlOfRank($query);
         })
         ->joinSub($playerAffiliation, 'pa', function (JoinClause $join) {
             $join->on('player_id', '=', 'pa.player_id_pa');
