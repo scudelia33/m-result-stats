@@ -5,13 +5,10 @@ namespace App\Http\Middleware;
 use App\Enums\BlankInList;
 use App\Models\MatchCategory;
 use App\Models\MatchResult;
-use App\Models\Season;
 use App\Traits\CommonFunctionsTrait;
 use App\Traits\MstatsFunctionsTrait;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,13 +28,11 @@ class AllPlayerRankingIndexMiddleware
         // ====================
         // クエリパラメータが存在しない場合を考慮して、クエリパラメータの追加
         $this->addQueryParameter($request, [
-            'season_id' => BlankInList::EXIST->value,
             'match_category_id' => BlankInList::EXIST->value,
         ]);
 
         // マスタの取得
         $request->merge([
-            'seasons' => Season::get(),
             'matchCategories' => MatchCategory::get(),
         ]);
 
@@ -62,7 +57,6 @@ class AllPlayerRankingIndexMiddleware
             $this->generationSqlOfRank($query);
         })
         ->whereHas('matchInformation.matchSchedule', function (Builder $query) use ($request) {
-            $query->equalSeasonId($request->season_id); // シーズンでの絞り込み
             $query->equalMatchCategoryId($request->match_category_id); // 試合カテゴリーでの絞り込み
         })
         ->groupBy('player_id')
@@ -72,10 +66,6 @@ class AllPlayerRankingIndexMiddleware
 
         $request->merge([
             'allPlayerRankings' => $allPlayerRankings,
-            'matchLastDateDisplay' => $this->getMatchLastDateDisplay(
-                $request->season_id,
-                $request->match_category_id
-            ),
         ]);
 
         return $next($request);
