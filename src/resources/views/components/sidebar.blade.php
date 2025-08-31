@@ -37,6 +37,11 @@
         </ul>
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
+                <a href="{{ route('all-player-ranking') }}">{{ __('AllPlayerRanking') }}</a>
+            </li>
+        </ul>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
                 <a href="{{ route('team-ranking') }}">{{ __('TeamRanking') }}</a>
             </li>
         </ul>
