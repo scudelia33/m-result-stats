@@ -4,6 +4,7 @@ use App\Http\Controllers\MatchResultController;
 use App\Http\Controllers\MatchScheduleController;
 use App\Http\Controllers\PlayerAffiliationController;
 use App\Http\Controllers\SeasonPlayerRankingController;
+use App\Http\Controllers\AllPlayerRankingController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamPointChartController;
 use App\Http\Controllers\TeamRankingController;
@@ -12,6 +13,7 @@ use App\Http\Middleware\PlayerAffiliationIndexMiddleware;
 use App\Http\Middleware\MatchScheduleIndexMiddleware;
 use App\Http\Middleware\MatchResultIndexMiddleware;
 use App\Http\Middleware\SeasonPlayerRankingIndexMiddleware;
+use App\Http\Middleware\AllPlayerRankingIndexMiddleware;
 use App\Http\Middleware\TeamPointChartMiddleware;
 use App\Http\Middleware\TeamRankingIndexMiddleware;
 use App\Http\Middleware\TeamStatsIndexMiddleware;
@@ -72,6 +74,13 @@ route::get('/season-player-ranking', [SeasonPlayerRankingController::class, 'ind
         SeasonPlayerRankingIndexMiddleware::class
     ])->
     name('season-player-ranking');
+
+// オール選手ランキング
+route::get('/all-player-ranking', [AllPlayerRankingController::class, 'index'])
+    ->middleware([
+        AllPlayerRankingIndexMiddleware::class
+    ])->
+    name('all-player-ranking');
 
 Route::get('/bootstrap', function () {
     return view('bootstrap');

@@ -1,0 +1,78 @@
+<x-main>
+    <x-slot:title>
+        {{ __('AllPlayerRanking') }}
+    </x-slot>
+
+    {{-- 検索条件 --}}
+    <x-search-condition>
+        {{-- 試合カテゴリー --}}
+        <x-match-category-list :match-category-id="$request->match_category_id" :match-categories="$request->matchCategories" />
+    </x-search-condition>
+
+    {{-- 検索結果に対する見出し --}}
+    <x-search-result-headline
+    text-center="{{ __('AllPlayerRanking') }}"
+    />
+
+    <x-table>
+        <x-slot:title>
+        </x-slot>
+
+        <x-slot:header>
+            <th @class([
+                'text-center',
+            ])>{{ __('Ranking') }}</th>
+            <th @class([
+                'text-center',
+            ])>{{ __('PlayerName') }}</th>
+            <th @class([
+                'text-end',
+            ])>{{ __('Point') }}</th>
+            <th @class([
+                'text-end',
+            ])>{{ __('TopRatio') }}</th>
+            <th @class([
+                'text-end',
+            ])>{{ __('AvoidBottomRatio') }}</th>
+            <th @class([
+                'text-end',
+            ])>{{ __('MatchCount') }}</th>
+            <th @class([
+                'text-center',
+            ])>{{ __('RankingBreakdown') }}</th>
+        </x-slot>
+
+        <x-slot:body>
+            @foreach ($request->allPlayerRankings as $allPlayerRankings)
+            <tr>
+                {{-- 順位 --}}
+                <td @class([
+                    'text-center',
+                ])>{{ $allPlayerRankings->player_rank }}</td>
+                {{-- 選手名 --}}
+                <td @class([
+                    'text-center',
+                ])>{{ $allPlayerRankings->player->player_name }}</td>
+                {{-- ポイント --}}
+                <x-point :point="$allPlayerRankings->sum_point" />
+                {{-- トップ率 --}}
+                <td @class([
+                    'text-end',
+                ])>{{ $allPlayerRankings->top_ratio }}</td>
+                {{-- ラス回避率 --}}
+                <td @class([
+                    'text-end',
+                ])>{{ $allPlayerRankings->avoid_bottom_ratio }}</td>
+                {{-- 試合数 --}}
+                <td @class([
+                    'text-end',
+                ])>{{$allPlayerRankings->match_count}}</td>
+                {{-- 順位詳細 --}}
+                <td @class([
+                    'text-center',
+                ])>{{ $allPlayerRankings->rank_detail }}</td>
+            </tr>
+            @endforeach
+        </x-slot>
+    </x-table>
+</x-main>
