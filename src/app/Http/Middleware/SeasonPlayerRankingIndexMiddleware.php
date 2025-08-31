@@ -44,8 +44,8 @@ class SeasonPlayerRankingIndexMiddleware
         // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
         $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($request->season_id);
 
-        // チームランキングの取得
-        $teamRankings = MatchResult::with([
+        // シーズン選手ランキングの取得
+        $seasonPlayerRankings = MatchResult::with([
             'player',
             'playerAffiliation' => function (HasOne $query) use ($request) {
                 $query->equalSeasonId($request->season_id);
@@ -81,7 +81,7 @@ class SeasonPlayerRankingIndexMiddleware
         ;
 
         $request->merge([
-            'teamRankings' => $teamRankings,
+            'seasonPlayerRankings' => $seasonPlayerRankings,
             'matchLastDateDisplay' => $this->getMatchLastDateDisplay(
                 $request->season_id,
                 $request->match_category_id

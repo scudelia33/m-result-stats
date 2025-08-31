@@ -50,36 +50,36 @@
         </x-slot>
 
         <x-slot:body>
-            @foreach ($request->teamRankings as $teamRanking)
+            @foreach ($request->seasonPlayerRankings as $seasonPlayerRankings)
             <tr>
                 {{-- 順位 --}}
                 <td @class([
                     'text-center',
-                ])>{{ $teamRanking->player_rank }}</td>
+                ])>{{ $seasonPlayerRankings->player_rank }}</td>
                 {{-- 選手名 --}}
                 <td @class([
                     'text-center',
-                ])>{{ $teamRanking->player->player_name }}</td>
+                ])>{{ $seasonPlayerRankings->player->player_name }}</td>
                 {{-- チーム名 --}}
-                <x-team-name :team-name="$teamRanking->playerAffiliation->team->team_name" :team-color="$teamRanking->playerAffiliation->team->team_color_to_text" />
+                <x-team-name :team-name="$seasonPlayerRankings->playerAffiliation->team->team_name" :team-color="$seasonPlayerRankings->playerAffiliation->team->team_color_to_text" />
                 {{-- ポイント --}}
-                <x-point :point="$teamRanking->sum_point" />
+                <x-point :point="$seasonPlayerRankings->sum_point" />
                 {{-- トップ率 --}}
                 <td @class([
                     'text-end',
-                ])>{{ $teamRanking->top_ratio }}</td>
+                ])>{{ $seasonPlayerRankings->top_ratio }}</td>
                 {{-- ラス回避率 --}}
                 <td @class([
                     'text-end',
-                ])>{{ $teamRanking->avoid_bottom_ratio }}</td>
+                ])>{{ $seasonPlayerRankings->avoid_bottom_ratio }}</td>
                 {{-- 試合数 --}}
                 <td @class([
                     'text-end',
-                ])>{{$teamRanking->match_count}}</td>
+                ])>{{$seasonPlayerRankings->match_count}}</td>
                 {{-- 順位詳細 --}}
                 <td @class([
                     'text-center',
-                ])>{{ $teamRanking->rank_detail }}</td>
+                ])>{{ $seasonPlayerRankings->rank_detail }}</td>
             </tr>
             @endforeach
         </x-slot>
