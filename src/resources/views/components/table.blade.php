@@ -24,12 +24,24 @@
     max-height: calc(100vh - 200px); /* 200pxは必要に応じて調整 */
     overflow-y: auto;
 }
+
+/* カスタムストライプ効果（オプション） */
+.table-striped tbody tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+    .table-striped tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+}
 </style>
 <div class="table-responsive table-scroll">
     <caption>{{ $title }}</caption>
     <table @class([
         'table',
         'table-hover',
+        'table-striped',
         'caption-top',
         'sticky-header',
     ])>
