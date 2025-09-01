@@ -93,7 +93,7 @@ class MatchResult extends Model
         return Attribute::make(
             get: function(mixed $value, array $attributes) {
                 $topRatio = $attributes['rank1'] / $attributes['match_count'] * 100;
-                return sprintf("%.1f%%", $topRatio);
+                return sprintf("%.2f%%", $topRatio);
             }
         );
     }
@@ -116,7 +116,7 @@ class MatchResult extends Model
                     return $rank;
                 })();
                 $topRatio = $notBottom / $attributes['match_count'] * 100;
-                return sprintf("%.1f%%", $topRatio);
+                return sprintf("%.2f%%", $topRatio);
             }
         );
     }
