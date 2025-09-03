@@ -11,7 +11,7 @@
 
 <div class="offcanvas offcanvas-start sidebar-narrow" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
     <div class="offcanvas-header">
-        <h5 id="offcanvasTopLabel">サイドメニュー</h5>
+        <h5 id="offcanvasTopLabel"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="閉じる"></button>
     </div>
     <div class="offcanvas-body">
