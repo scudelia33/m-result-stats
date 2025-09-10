@@ -2,6 +2,7 @@ import './bootstrap';
 import './chart-parameter.js';
 import './team-point-chart.js';
 import './team-stats-chart.js';
+import './sortable-table.js';
 
 import * as bootstrap from 'bootstrap';
 
