@@ -38,13 +38,9 @@
 </style>
 <div class="table-responsive table-scroll">
     <caption>{{ $title }}</caption>
-    <table @class([
-        'table',
-        'table-hover',
-        'table-striped',
-        'caption-top',
-        'sticky-header',
-    ])>
+    <table {{ $attributes->merge([
+        'class' => 'table table-hover table-striped caption-top sticky-header'
+    ]) }}>
         <thead>
             <tr>
                 {{ $header }}

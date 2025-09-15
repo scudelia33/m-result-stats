@@ -14,29 +14,47 @@
     text-center="{{ __('AllPlayerRanking') }}"
     />
 
-    <x-table>
+    <x-table class="sortable-table">
         <x-slot:title>
         </x-slot>
 
         <x-slot:header>
             <th @class([
                 'text-center',
-            ])>{{ __('Ranking') }}</th>
+                'sortable-header'
+            ]) data-sort="player_rank" style="cursor: pointer;">
+                {{ __('Ranking') }} <span class="sort-arrow"></span>
+            </th>
             <th @class([
                 'text-center',
-            ])>{{ __('PlayerName') }}</th>
+                'sortable-header'
+            ]) data-sort="player_name" style="cursor: pointer;">
+                {{ __('PlayerName') }} <span class="sort-arrow"></span>
+            </th>
             <th @class([
                 'text-end',
-            ])>{{ __('Point') }}</th>
+                'sortable-header'
+            ]) data-sort="sum_point" style="cursor: pointer;">
+                {{ __('Point') }} <span class="sort-arrow"></span>
+            </th>
             <th @class([
                 'text-end',
-            ])>{{ __('TopRatio') }}</th>
+                'sortable-header'
+            ]) data-sort="top_ratio" style="cursor: pointer;">
+                {{ __('TopRatio') }} <span class="sort-arrow"></span>
+            </th>
             <th @class([
                 'text-end',
-            ])>{{ __('AvoidBottomRatio') }}</th>
+                'sortable-header'
+            ]) data-sort="avoid_bottom_ratio" style="cursor: pointer;">
+                {{ __('AvoidBottomRatio') }} <span class="sort-arrow"></span>
+            </th>
             <th @class([
                 'text-end',
-            ])>{{ __('MatchCount') }}</th>
+                'sortable-header'
+            ]) data-sort="match_count" style="cursor: pointer;">
+                {{ __('MatchCount') }} <span class="sort-arrow"></span>
+            </th>
             <th @class([
                 'text-center',
             ])>{{ __('RankingBreakdown') }}</th>
@@ -44,7 +62,14 @@
 
         <x-slot:body>
             @foreach ($request->allPlayerRankings as $allPlayerRankings)
-            <tr>
+            <tr
+                data-player-rank="{{ $allPlayerRankings->player_rank }}"
+                data-player-name="{{ $allPlayerRankings->player->player_name }}"
+                data-sum-point="{{ $allPlayerRankings->sum_point }}"
+                data-top-ratio="{{ $allPlayerRankings->top_ratio }}"
+                data-avoid-bottom-ratio="{{ $allPlayerRankings->avoid_bottom_ratio }}"
+                data-match-count="{{ $allPlayerRankings->match_count }}"
+            >
                 {{-- 順位 --}}
                 <td @class([
                     'text-center',
