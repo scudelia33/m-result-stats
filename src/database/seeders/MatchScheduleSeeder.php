@@ -797,6 +797,7 @@ class MatchScheduleSeeder extends Seeder
             ['match_date' => '2025-05-13', 'season_id' => 7, 'match_category_id' => 3,],
             ['match_date' => '2025-05-15', 'season_id' => 7, 'match_category_id' => 3,],
             ['match_date' => '2025-05-16', 'season_id' => 7, 'match_category_id' => 3,],
+            ['match_date' => '2025-09-15', 'season_id' => 8, 'match_category_id' => 1,],
             ['match_date' => '2025-09-16', 'season_id' => 8, 'match_category_id' => 1,],
             ['match_date' => '2025-09-18', 'season_id' => 8, 'match_category_id' => 1,],
             ['match_date' => '2025-09-19', 'season_id' => 8, 'match_category_id' => 1,],
