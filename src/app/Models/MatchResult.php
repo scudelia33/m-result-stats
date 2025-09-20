@@ -120,4 +120,31 @@ class MatchResult extends Model
             }
         );
     }
+
+    /**
+     * 平均着順を取得する ※(1位*1 + 2位*2 + 3位*3 + 4位*4) / 試合数
+     *
+     * 小数点第3位で四捨五入し、小数点第2位までの数値を返します
+     */
+    public function averageRank(): Attribute
+    {
+        return Attribute::make(
+            get: function(mixed $value, array $attributes) {
+                $r1 = $attributes['rank1'] ?? 0;
+                $r2 = $attributes['rank2'] ?? 0;
+                $r3 = $attributes['rank3'] ?? 0;
+                $r4 = $attributes['rank4'] ?? 0;
+                $matchCount = $attributes['match_count'] ?? 0;
+
+                if ($matchCount <= 0) {
+                    return 0.00;
+                }
+
+                $avg = ($r1 * 1 + $r2 * 2 + $r3 * 3 + $r4 * 4) / $matchCount;
+                // 小数点第3位で四捨五入して小数第2位まで保持
+                $rounded = round($avg, 2);
+                return $rounded;
+            }
+        );
+    }
 }
