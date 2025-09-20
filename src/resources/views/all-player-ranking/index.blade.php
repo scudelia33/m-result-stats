@@ -59,7 +59,7 @@
                 'text-end',
                 'sortable-header'
             ]) data-sort="average_rank" style="cursor: pointer;">
-                平均着順 <span class="sort-arrow"></span>
+                {{ __('AverageRank') }} <span class="sort-arrow"></span>
             </th>
             <th @class([
                 'text-center',
