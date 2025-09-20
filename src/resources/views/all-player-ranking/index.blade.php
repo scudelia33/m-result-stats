@@ -56,6 +56,12 @@
                 {{ __('MatchCount') }} <span class="sort-arrow"></span>
             </th>
             <th @class([
+                'text-end',
+                'sortable-header'
+            ]) data-sort="average_rank" style="cursor: pointer;">
+                平均着順 <span class="sort-arrow"></span>
+            </th>
+            <th @class([
                 'text-center',
             ])>{{ __('RankingBreakdown') }}</th>
         </x-slot>
@@ -92,6 +98,10 @@
                 <td @class([
                     'text-end',
                 ])>{{$allPlayerRankings->match_count}}</td>
+                {{-- 平均着順 --}}
+                <td @class([
+                    'text-end',
+                ])>{{ number_format($allPlayerRankings->average_rank, 2) }}</td>
                 {{-- 順位詳細 --}}
                 <td @class([
                     'text-center',
