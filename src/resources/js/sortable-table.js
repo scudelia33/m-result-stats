@@ -54,6 +54,7 @@ class SortableTable {
                     aValue = parseInt(a.dataset[dataAttribute]);
                     bValue = parseInt(b.dataset[dataAttribute]);
                     break;
+                case 'average_rank':
                 case 'sum_point':
                 case 'top_ratio':
                 case 'avoid_bottom_ratio':

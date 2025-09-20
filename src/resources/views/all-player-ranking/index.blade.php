@@ -75,6 +75,7 @@
                 data-top-ratio="{{ $allPlayerRankings->top_ratio }}"
                 data-avoid-bottom-ratio="{{ $allPlayerRankings->avoid_bottom_ratio }}"
                 data-match-count="{{ $allPlayerRankings->match_count }}"
+                data-average-rank="{{ $allPlayerRankings->average_rank }}"
             >
                 {{-- 順位 --}}
                 <td @class([
