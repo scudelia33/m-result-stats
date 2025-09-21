@@ -15,6 +15,7 @@
         <x-slot:header>
             <th scope="col">@sortablelink('team_id', 'ID')</th>
             <th scope="col">@sortablelink('team_name', 'チーム名')</th>
+            <th scope="col">{{ __('team.team_name_shortened') }}</th>
         </x-slot>
 
         <x-slot:body>
@@ -23,6 +24,8 @@
                 <th scope="row">{{ $team->team_id }}</th>
                 {{-- チーム名 --}}
                 <x-team-name :team-name="$team->team_name" :team-color="$team->background_color" />
+                {{-- 短縮名（チーム名の右側） --}}
+                <td class="text-center">{{ $team->team_name_shortened }}</td>
             </tr>
             @endforeach
         </x-slot>

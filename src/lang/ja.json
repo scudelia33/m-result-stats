@@ -28,5 +28,6 @@
     "TeamStats": "チームスタッツ",
     "TopRatio": "トップ率",
     "AverageRank": "平均着順",
-    "ZzzDummy": ""
+    "ZzzDummy": "",
+    "team.team_name_shortened": "短縮名"
 }
