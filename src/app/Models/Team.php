@@ -18,6 +18,20 @@ class Team extends Model
     protected $primaryKey = 'team_id';
 
     /**
+     * Mass assignable attributes
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'team_id',
+        'team_name',
+        'team_name_shortened',
+        'team_color',
+        'background_color',
+        'team_color_to_graph',
+    ];
+
+    /**
      * 持ち越しポイントポイントテーブルとの結合
      */
     public function carriedOverPoint(): HasOne

@@ -51,7 +51,7 @@ class MatchResultIndexMiddleware
                 $query->equalSeasonId($request->season_id);
             },
             'playerAffiliation.player',
-            'playerAffiliation.team:team_id,team_name,team_color_to_text',
+            'playerAffiliation.team:team_id,team_name,background_color',
             'matchInformation.matchSchedule',
             'matchInformation.matchSchedule.season',
             'matchInformation.matchSchedule.matchCategory',

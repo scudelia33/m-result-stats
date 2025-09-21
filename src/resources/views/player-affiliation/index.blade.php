@@ -40,7 +40,7 @@
                     'text-center',
                 ])>{{ $playerAffiliation->season->season_name }}</td>
                 {{-- チーム名 --}}
-                <x-team-name :team-name="$playerAffiliation->team->team_name" :team-color="$playerAffiliation->team->team_color_to_text" />
+                <x-team-name :team-name="$playerAffiliation->team->team_name" :team-color="$playerAffiliation->team->background_color" />
                 {{-- 選手名 --}}
                 <td @class([
                     'text-center',
