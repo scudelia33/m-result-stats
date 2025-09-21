@@ -28,7 +28,7 @@ class Team extends Model
         'team_name_shortened',
         'team_color',
         'background_color',
-        'team_color_to_graph',
+        'graph_color',
     ];
 
     /**
