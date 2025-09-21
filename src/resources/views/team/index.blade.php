@@ -13,11 +13,11 @@
         </x-slot>
 
         <x-slot:header>
-            <th scope="col">@sortablelink('team_id', 'ID')</th>
-            <th scope="col">@sortablelink('team_name', 'チーム名')</th>
-            <th scope="col">{{ __('team.team_name_shortened') }}</th>
-            <th scope="col">{{ __('team.background_color') }}</th>
-            <th scope="col">{{ __('team.graph_color') }}</th>
+            <th scope="col" class="text-center">@sortablelink('team_id', 'ID')</th>
+            <th scope="col" class="text-center">@sortablelink('team_name', 'チーム名')</th>
+            <th scope="col" class="text-center">{{ __('team.team_name_shortened') }}</th>
+            <th scope="col" class="text-center">{{ __('team.background_color') }}</th>
+            <th scope="col" class="text-center">{{ __('team.graph_color') }}</th>
         </x-slot>
 
         <x-slot:body>
