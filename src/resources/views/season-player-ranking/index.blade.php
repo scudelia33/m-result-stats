@@ -97,7 +97,7 @@
                     'text-center',
                 ])>{{ $seasonPlayerRankings->player->player_name }}</td>
                 {{-- チーム名 --}}
-                <x-team-name :team-name="$seasonPlayerRankings->playerAffiliation->team->team_name" :team-color="$seasonPlayerRankings->playerAffiliation->team->team_color_to_text" />
+                <x-team-name :team-name="$seasonPlayerRankings->playerAffiliation->team->team_name" :team-color="$seasonPlayerRankings->playerAffiliation->team->background_color" />
                 {{-- ポイント --}}
                 <x-point :point="$seasonPlayerRankings->sum_point" />
                 {{-- トップ率 --}}

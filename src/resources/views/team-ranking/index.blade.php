@@ -86,7 +86,7 @@
                     'text-center',
                 ])>{{ $teamRanking->team_rank }}</td>
                 {{-- チーム名 --}}
-                <x-team-name :team-name="$teamRanking->team->team_name" :team-color="$teamRanking->team->team_color_to_text" />
+                <x-team-name :team-name="$teamRanking->team->team_name" :team-color="$teamRanking->team->background_color" />
                 {{-- ポイントを合算する場合に表示する --}}
                 @if ($request->is_combine_carried_over_point)
                     {{-- 持ち越しポイント --}}

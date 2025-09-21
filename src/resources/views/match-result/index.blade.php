@@ -73,7 +73,7 @@
                     'text-center',
                 ])>{{ $matchResult->playerAffiliation->player->player_name}}</td>
                 @php
-                    $background_color = "background-color: #{$matchResult->playerAffiliation->team->team_color_to_text}";
+                    $background_color = "background-color: #{$matchResult->playerAffiliation->team->background_color}";
                 @endphp
                 <td @class([
                     'text-center',
