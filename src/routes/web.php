@@ -9,7 +9,6 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamPointChartController;
 use App\Http\Controllers\TeamRankingController;
 use App\Http\Controllers\TeamStatsController;
-use App\Http\Middleware\PlayerAffiliationIndexMiddleware;
 use App\Http\Middleware\MatchScheduleIndexMiddleware;
 use App\Http\Middleware\MatchResultIndexMiddleware;
 use App\Http\Middleware\SeasonPlayerRankingIndexMiddleware;
@@ -28,10 +27,7 @@ route::get('/teams', [TeamController::class, 'index']);
 
 // 選手所属
 route::get('/player-affiliations', [PlayerAffiliationController::class, 'index'])
-    ->middleware([
-        PlayerAffiliationIndexMiddleware::class
-    ])->
-    name('player-affiliations');
+    ->name('player-affiliations');
 
 // 試合日程
 route::get('/match-schedules', [MatchScheduleController::class, 'index'])
