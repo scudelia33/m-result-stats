@@ -9,7 +9,6 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamPointChartController;
 use App\Http\Controllers\TeamRankingController;
 use App\Http\Controllers\TeamStatsController;
-use App\Http\Middleware\AllPlayerRankingIndexMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -49,10 +48,7 @@ route::get('/season-player-ranking', [SeasonPlayerRankingController::class, 'ind
 
 // オール選手ランキング
 route::get('/all-player-ranking', [AllPlayerRankingController::class, 'index'])
-    ->middleware([
-        AllPlayerRankingIndexMiddleware::class
-    ])->
-    name('all-player-ranking');
+    ->name('all-player-ranking');
 
 Route::get('/bootstrap', function () {
     return view('bootstrap');
