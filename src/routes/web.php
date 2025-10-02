@@ -13,7 +13,6 @@ use App\Http\Middleware\MatchResultIndexMiddleware;
 use App\Http\Middleware\SeasonPlayerRankingIndexMiddleware;
 use App\Http\Middleware\AllPlayerRankingIndexMiddleware;
 use App\Http\Middleware\TeamPointChartMiddleware;
-use App\Http\Middleware\TeamRankingIndexMiddleware;
 use App\Http\Middleware\TeamStatsIndexMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -41,10 +40,7 @@ route::get('/match-results', [MatchResultController::class, 'index'])
 
 // チームランキング
 route::get('/team-ranking', [TeamRankingController::class, 'index'])
-    ->middleware([
-        TeamRankingIndexMiddleware::class
-    ])->
-    name('team-ranking');
+    ->name('team-ranking');
 
 // チームスタッツ
 route::get('/team-stats', [TeamStatsController::class, 'index'])
