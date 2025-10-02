@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Services;
 
 use App\Enums\BlankInList;
 use App\Models\MatchCategory;
@@ -9,27 +9,26 @@ use App\Models\Player;
 use App\Models\Season;
 use App\Models\Team;
 use App\Traits\CommonFunctionsTrait;
-use Closure;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class MatchResultIndexMiddleware
+class MatchResultService
 {
     use CommonFunctionsTrait;
+
     /**
-     * Handle an incoming request.
+     * 試合成績一覧表示に必要なデータを準備します。
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * - クエリパラメータのデフォルト値を確保
+     * - マスタデータ（matchCategories, players, seasons, teams）を追加
+     * - 該当する MatchResult を取得してリクエストにマージ
+     *
+     * @param Request $request
+     * @return Request
      */
-    public function handle(Request $request, Closure $next): Response
+    public function prepareIndexData(Request $request): Request
     {
-        // ====================
-        // ここに前処理を記述
-        // ====================
-        // クエリパラメータが存在しない場合を考慮して、クエリパラメータの追加
-        // 検索結果が0件になるように-1を指定している
+        // クエリパラメータのデフォルトを確保（検索が0件になるような値を使う想定）
         $this->addQueryParameter($request, [
             'match_category_id' => BlankInList::EXIST->value,
             'player_id' => BlankInList::EXIST->value,
@@ -37,7 +36,7 @@ class MatchResultIndexMiddleware
             'team_id' => BlankInList::EXIST->value,
         ]);
 
-        // マスタの取得
+        // マスタデータを取得
         $request->merge([
             'matchCategories' => MatchCategory::get(),
             'players' => Player::get(),
@@ -45,7 +44,7 @@ class MatchResultIndexMiddleware
             'teams' => Team::get(),
         ]);
 
-        // 試合結果の取得
+        // 試合成績を取得
         $matchResults = MatchResult::with([
             'playerAffiliation' => function (HasOne $query) use ($request) {
                 $query->equalSeasonId($request->season_id);
@@ -56,38 +55,32 @@ class MatchResultIndexMiddleware
             'matchInformation.matchSchedule.season',
             'matchInformation.matchSchedule.matchCategory',
         ])
-        ->whereHas('matchInformation.matchSchedule', function (Builder $query) use ($request) { // 試合日テーブルとの結合
-            $query->when($request->season_id, function (Builder $query) use ($request) {
+        ->whereHas('matchInformation.matchSchedule', function ($query) use ($request) {
+            $query->when($request->season_id, function ($query) use ($request) {
                 $query->equalSeasonId($request->season_id);
             })
-            ->when($request->match_category_id, function (Builder $query) use ($request) {
+            ->when($request->match_category_id, function ($query) use ($request) {
                 $query->equalMatchCategoryId($request->match_category_id);
-            })
-            ;
+            });
         })
-        ->whereHas('playerAffiliation', function (Builder $query) use ($request) { // 選手所属テーブルとの結合
-            $query->when($request->team_id, function (Builder $query) use ($request) {
+        ->whereHas('playerAffiliation', function ($query) use ($request) {
+            $query->when($request->team_id, function ($query) use ($request) {
                 $query->equalTeamId($request->team_id);
             })
-            ->when($request->player_id, function (Builder $query) use ($request) {
+            ->when($request->player_id, function ($query) use ($request) {
                 $query->equalPlayerId($request->player_id);
             })
-            ->when($request->season_id, function (Builder $query) use ($request) {
+            ->when($request->season_id, function ($query) use ($request) {
                 $query->equalSeasonId($request->season_id);
-            })
-            ;
+            });
         })
         ->oldest('match_result_id')
-        ->get()
-        ;
+        ->get();
 
         $request->merge([
             'matchResults' => $matchResults,
         ]);
 
-        return $next($request);
-        // ====================
-        // ここに後処理を記述
-        // ====================
+        return $request;
     }
 }

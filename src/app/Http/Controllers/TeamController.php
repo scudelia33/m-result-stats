@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Team;
+use App\Services\TeamService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TeamController extends Controller
 {
-    public function index ()
+    public function index (TeamService $service)
     {
-        // Use explicit orderBy to avoid relying on the removed Sortable trait
-        $teams = Team::orderBy('team_name', 'asc')->get();
-        return View('team.index',
-            compact('teams')
-        );
+        $teams = $service->getAllOrderedTeams();
+        return View('team.index', compact('teams'));
     }
 }
