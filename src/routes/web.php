@@ -9,7 +9,6 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamPointChartController;
 use App\Http\Controllers\TeamRankingController;
 use App\Http\Controllers\TeamStatsController;
-use App\Http\Middleware\SeasonPlayerRankingIndexMiddleware;
 use App\Http\Middleware\AllPlayerRankingIndexMiddleware;
 use App\Http\Middleware\TeamPointChartMiddleware;
 use App\Http\Middleware\TeamStatsIndexMiddleware;
@@ -54,10 +53,7 @@ route::get('/team-point-chart', [TeamPointChartController::class, 'index'])
 
 // シーズン選手ランキング
 route::get('/season-player-ranking', [SeasonPlayerRankingController::class, 'index'])
-    ->middleware([
-        SeasonPlayerRankingIndexMiddleware::class
-    ])->
-    name('season-player-ranking');
+    ->name('season-player-ranking');
 
 // オール選手ランキング
 route::get('/all-player-ranking', [AllPlayerRankingController::class, 'index'])

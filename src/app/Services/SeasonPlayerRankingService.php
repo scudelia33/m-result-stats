@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Services;
 
 use App\Enums\BlankInList;
 use App\Models\MatchCategory;
@@ -8,28 +8,28 @@ use App\Models\MatchResult;
 use App\Models\Season;
 use App\Traits\CommonFunctionsTrait;
 use App\Traits\MstatsFunctionsTrait;
-use Closure;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class SeasonPlayerRankingIndexMiddleware
+class SeasonPlayerRankingService
 {
     use CommonFunctionsTrait;
     use MstatsFunctionsTrait;
+
     /**
-     * Handle an incoming request.
+     * シーズン選手ランキング表示に必要なデータを準備します。
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * - クエリパラメータのデフォルトを確保
+     * - マスタデータ（seasons, matchCategories）を追加
+     * - プレイヤーごとの合計ポイント等を集計してランキングを作成
+     *
+     * @param Request $request
+     * @return Request
      */
-    public function handle(Request $request, Closure $next): Response
+    public function prepareIndexData(Request $request): Request
     {
-        // ====================
-        // ここに前処理を記述
-        // ====================
-        // クエリパラメータが存在しない場合を考慮して、クエリパラメータの追加
+        // クエリパラメータのデフォルトを確保
         $this->addQueryParameter($request, [
             'season_id' => BlankInList::EXIST->value,
             'match_category_id' => BlankInList::EXIST->value,
@@ -44,7 +44,7 @@ class SeasonPlayerRankingIndexMiddleware
         // チームIDでグルーピングするために、結合用の成績所属テーブルの定義
         $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($request->season_id);
 
-        // シーズン選手ランキングの取得
+        // シーズン選手ランキングを取得
         $seasonPlayerRankings = MatchResult::with([
             'player',
             'playerAffiliation' => function (HasOne $query) use ($request) {
@@ -52,33 +52,24 @@ class SeasonPlayerRankingIndexMiddleware
             },
             'playerAffiliation.team',
         ])
-        ->select(
-            'player_id',
-        )
-        ->selectRaw(
-            'RANK() OVER (ORDER BY SUM(point + IFNULL(penalty, 0)) DESC) as player_rank', // 選手順位
-        )
-        ->selectRaw(
-            'SUM(point + IFNULL(penalty, 0)) as sum_point', // ポイント
-        )
-        ->selectRaw(
-            'COUNT(`rank`) as match_count', // 試合数
-        )
-        ->when(true, function (Builder $query) {
-            // 順位1-4を取得するSQLを生成
+        ->select('player_id')
+        ->selectRaw('RANK() OVER (ORDER BY SUM(point + IFNULL(penalty, 0)) DESC) as player_rank')
+        ->selectRaw('SUM(point + IFNULL(penalty, 0)) as sum_point')
+        ->selectRaw('COUNT(`rank`) as match_count')
+        ->when(true, function ($query) {
+            // 順位1-4を取得する SQL を生成
             $this->generationSqlOfRank($query);
         })
         ->joinSub($playerAffiliation, 'pa', function (JoinClause $join) {
             $join->on('player_id', '=', 'pa.player_id_pa');
         })
-        ->whereHas('matchInformation.matchSchedule', function (Builder $query) use ($request) {
-            $query->equalSeasonId($request->season_id); // シーズンでの絞り込み
-            $query->equalMatchCategoryId($request->match_category_id); // 試合カテゴリーでの絞り込み
+        ->whereHas('matchInformation.matchSchedule', function ($query) use ($request) {
+            $query->equalSeasonId($request->season_id);
+            $query->equalMatchCategoryId($request->match_category_id);
         })
         ->groupBy('player_id')
         ->orderBy('sum_point', 'desc')
-        ->get()
-        ;
+        ->get();
 
         $request->merge([
             'seasonPlayerRankings' => $seasonPlayerRankings,
@@ -88,9 +79,6 @@ class SeasonPlayerRankingIndexMiddleware
             ),
         ]);
 
-        return $next($request);
-        // ====================
-        // ここに後処理を記述
-        // ====================
+        return $request;
     }
 }
