@@ -36,6 +36,7 @@ class TeamStatsService
     public function prepareIndexData(Request $request): Request
     {
         // クエリパラメータのデフォルトを確保
+        // デフォルト値は「全件」や「未選択」を意味する BlankInList::EXIST->value を利用し、初期表示時に全データを対象とするため
         $this->addQueryParameter($request, [
             'team_id' => BlankInList::EXIST->value,
             'season_id' => BlankInList::EXIST->value,
@@ -48,14 +49,16 @@ class TeamStatsService
             'seasons' => Season::get(),
             'matchCategories' => MatchCategory::get(),
             'teams' => Team::get(),
-            'teamCount' => CarriedOverPoint::select()
+            'teamCount' => CarriedOverPoint::select('team_id')
                 ->equalSeasonId($request->season_id)
                 ->equalMatchCategoryId($request->match_category_id)
-                ->count(),
-            'teamName' => Team::select()
-                ->equalTeamId($request->team_id)
-                ->first()
-                ->team_name ?? '',
+                ->distinct()
+                ->count('team_id'),
+            'teamName' => optional(
+                Team::select()
+                    ->equalTeamId($request->team_id)
+                    ->first()
+            )->team_name ?? '',
         ]);
 
         // 1. チームID/試合日毎のポイント取得
