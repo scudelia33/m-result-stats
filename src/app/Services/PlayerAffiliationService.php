@@ -50,9 +50,11 @@ class PlayerAffiliationService
         ->when($request->team_id, function ($query) use ($request) {
             $query->equalTeamId($request->team_id);
         })
-        ->orderBy('team_id')
-        ->orderBy('season_id')
-        ->orderBy('view_order')
+        ->orderBy([
+            'team_id',
+            'season_id',
+            'view_order',
+        ])
         ->get();
 
         $request->merge(['playerAffiliations' => $playerAffiliations]);
