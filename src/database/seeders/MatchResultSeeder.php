@@ -6440,6 +6440,22 @@ class MatchResultSeeder extends Seeder
             ['match_id' => 1606, 'rank' => 2, 'player_id' => 17, 'point' => 2, 'penalty' => NULL,],
             ['match_id' => 1606, 'rank' => 3, 'player_id' => 33, 'point' => -19.7, 'penalty' => NULL,],
             ['match_id' => 1606, 'rank' => 4, 'player_id' => 31, 'point' => -56.1, 'penalty' => NULL,],
+            ['match_id' => 1607, 'rank' => 1, 'player_id' => 35, 'point' => 106, 'penalty' => NULL,],
+            ['match_id' => 1607, 'rank' => 2, 'player_id' => 22, 'point' => 0.2, 'penalty' => NULL,],
+            ['match_id' => 1607, 'rank' => 3, 'player_id' => 52, 'point' => -34, 'penalty' => NULL,],
+            ['match_id' => 1607, 'rank' => 4, 'player_id' => 9, 'point' => -72.2, 'penalty' => NULL,],
+            ['match_id' => 1608, 'rank' => 1, 'player_id' => 24, 'point' => 64.8, 'penalty' => NULL,],
+            ['match_id' => 1608, 'rank' => 2, 'player_id' => 51, 'point' => 13.4, 'penalty' => NULL,],
+            ['match_id' => 1608, 'rank' => 3, 'player_id' => 36, 'point' => -23.7, 'penalty' => NULL,],
+            ['match_id' => 1608, 'rank' => 4, 'player_id' => 5, 'point' => -54.5, 'penalty' => NULL,],
+            ['match_id' => 1609, 'rank' => 1, 'player_id' => 1, 'point' => 54.4, 'penalty' => NULL,],
+            ['match_id' => 1609, 'rank' => 2, 'player_id' => 20, 'point' => 4.3, 'penalty' => NULL,],
+            ['match_id' => 1609, 'rank' => 3, 'player_id' => 12, 'point' => -17, 'penalty' => NULL,],
+            ['match_id' => 1609, 'rank' => 4, 'player_id' => 27, 'point' => -41.7, 'penalty' => NULL,],
+            ['match_id' => 1610, 'rank' => 1, 'player_id' => 25, 'point' => 52.1, 'penalty' => NULL,],
+            ['match_id' => 1610, 'rank' => 2, 'player_id' => 2, 'point' => 5.6, 'penalty' => NULL,],
+            ['match_id' => 1610, 'rank' => 3, 'player_id' => 11, 'point' => -15.9, 'penalty' => NULL,],
+            ['match_id' => 1610, 'rank' => 4, 'player_id' => 18, 'point' => -41.8, 'penalty' => NULL,],
         ];
         MatchResult::insert($data);
     }
