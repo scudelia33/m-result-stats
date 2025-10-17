@@ -3,6 +3,7 @@
 use App\Http\Controllers\MatchResultController;
 use App\Http\Controllers\MatchScheduleController;
 use App\Http\Controllers\PlayerAffiliationController;
+use App\Http\Controllers\PlayerStatsController;
 use App\Http\Controllers\SeasonPlayerRankingController;
 use App\Http\Controllers\AllPlayerRankingController;
 use App\Http\Controllers\TeamController;
@@ -45,6 +46,10 @@ route::get('/team-point-chart', [TeamPointChartController::class, 'index'])
 // シーズン選手ランキング
 route::get('/season-player-ranking', [SeasonPlayerRankingController::class, 'index'])
     ->name('season-player-ranking');
+
+// 選手成績
+route::get('/player-stats', [PlayerStatsController::class, 'index'])
+    ->name('player-stats');
 
 // オール選手ランキング
 route::get('/all-player-ranking', [AllPlayerRankingController::class, 'index'])
