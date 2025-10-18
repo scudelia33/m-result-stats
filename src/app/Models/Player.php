@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,14 @@ class Player extends Model
 
     // 主キー
     protected $primaryKey = 'player_id';
+
+    /**
+     * 選手IDでの絞り込み
+     */
+    public function scopeEqualPlayerId(Builder $query, int $value): void
+    {
+        $query->where('player_id', $value);
+    }
 
     // ====================
     // アクセサ
