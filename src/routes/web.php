@@ -10,6 +10,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamPointChartController;
 use App\Http\Controllers\TeamRankingController;
 use App\Http\Controllers\TeamStatsController;
+use App\Http\Controllers\TeamMonthlyPointController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -34,6 +35,10 @@ route::get('/match-results', [MatchResultController::class, 'index'])
 // チームランキング
 route::get('/team-ranking', [TeamRankingController::class, 'index'])
     ->name('team-ranking');
+
+// チーム月毎ポイント
+route::get('/team-monthly-point', [TeamMonthlyPointController::class, 'index'])
+    ->name('team-monthly-point');
 
 // チームスタッツ
 route::get('/team-stats', [TeamStatsController::class, 'index'])

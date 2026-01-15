@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Team extends Model
@@ -36,6 +37,14 @@ class Team extends Model
     public function carriedOverPoint(): HasOne
     {
         return $this->hasOne(CarriedOverPoint::class, 'team_id', 'team_id');
+    }
+
+    /**
+     * 選手所属テーブルとの結合
+     */
+    public function playerAffiliations(): HasMany
+    {
+        return $this->hasMany(PlayerAffiliation::class, 'team_id', 'team_id');
     }
 
     /**
