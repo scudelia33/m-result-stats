@@ -1,90 +1,186 @@
 # Copilot / AI assistant instructions for this repository
 
-このリポジトリは Laravel (PHP 8.2 / Laravel 11) をベースにした Web アプリケーションです。
-以下は、AI 補助エージェント（Copilot等）がこのコードベースで効率的に作業するための簡潔で実用的な指示集です。
+このリポジトリは Laravel (PHP 8.2/8.4 / Laravel 12) をベースにした Web アプリケーションです。
+スポーツ大会データ管理システムで、試合結果、チームランキング、選手スタッツなどの表示に特化しています。
 
-## 主要な構成
-- app/
-  - Http/Controllers: ルートハンドラ（コントローラ）
-  - Http/Middleware: 既存のミドルウェア（多くはビュー用の前処理を含む）
-  - Models: Eloquent モデル
-  - Services: (追加済) ミドルウェアの処理を移植したサービスクラス
-  - Traits: 共通ユーティリティ（CommonFunctionsTrait, MstatsFunctionsTrait など）
-- routes/web.php: HTTP ルート定義
-- resources/views: Blade ビュー
-- database/: マイグレーション / シーディング / sqlite DB
-- tests/: PHPUnit テスト
+## アーキテクチャの全体像
 
-## 目的/コーディング・パターン
-現在の主要目的は「ルート固有の前処理ロジックをミドルウェアからサービスクラスへ移動」することです。移行済みのルート例：
-- /player-affiliations
-- /match-schedules
-- /match-results
-- /team-ranking
-- /team-stats
-- /team-point-chart
-- /season-player-ranking
-- /all-player-ranking
+### 3層構造（データ→ビジネスロジック→表示）
+1. **Models** (`app/Models/`) - Eloquent モデル（Team, Season, MatchResult など）
+   - `HasMany`, `HasOne` リレーションを活用、`SoftDeletes` で論理削除対応
+   - `team_id`, `season_id` など、自動採番でない主キーを使用（`protected $primaryKey` で明示）
+2. **Services** (`app/Services/`) - ビジネスロジック層（主力）
+   - `prepareIndexData(Request $request): Request` メソッドが標準インターフェース
+   - Trait（CommonFunctionsTrait, MstatsFunctionsTrait）から共通処理を取得
+   - 複雑な集計クエリ（JOIN, グループ化）を集約
+3. **Controllers** (`app/Http/Controllers/`) - リクエスト→レスポンス仲介
+   - コンストラクタインジェクションでサービスを受け取る
+   - `index()` でサービスの `prepareIndexData()` を呼ぶだけ
 
-推奨パターン（採用済）：
-- ミドルウェアのロジックは App\Services\<Feature>Service.php に移す。
-- Service は public function prepareIndexData(Request $request): Request を提供し、リクエストにデータを merge/put して返す。
-- コントローラはサービスをコンストラクタで注入し、index() 内で $request = $this->service->prepareIndexData($request); を呼ぶ。
-- ルート定義から該当ミドルウェアを削除し、ミドルウェアファイルは削除（または DEPRECATED スタブに置換）する。
-- 既存のビューは現在 `compact('request')` でリクエストを受け取る設計になっているため、簡単な安全策としてリクエストをそのまま渡す。
+### 現在の機能一覧
+- `/player-affiliations` - 選手所属
+- `/match-schedules` - 試合日程
+- `/match-results` - 試合結果
+- `/team-ranking` - チームランキング
+- `/team-stats` - チームスタッツ
+- `/team-point-chart` - チームポイント推移グラフ
+- `/team-monthly-point` - 月別ポイント
+- `/season-player-ranking` - シーズン選手ランキング
+- `/all-player-ranking` - 通算選手ランキング
 
-## 小さな作業チェックリスト（変更手順）
-1. 変更対象ミドルウェアを検索：`app/Http/Middleware/*`。
-2. ミドルウェアの処理を読み、同等ロジックを `app/Services/<Name>Service.php` の `prepareIndexData(Request $request): Request` に移す。
-   - 既に存在する trait やユーティリティを再利用する（例：CommonFunctionsTrait, MstatsFunctionsTrait）。
-3. 対応コントローラを更新：コンストラクタインジェクションと index() のサービス呼び出しを追加。
-4. routes/web.php からミドルウェア呼び出しを削除（コントローラのルートはそのまま）。
-5. ミドルウェアファイルを DEPRECATED スタブに置換 -> 削除。変更前に repo 全体で参照検索（`grep`）して他箇所で使われていないか確認。
-6. 変更後、必ず `php -l` で構文チェック。
-7. 可能なら既存のユニット/フィーチャーテストを実行して動作を確認（`vendor/bin/phpunit`）。
+### 主要な構成
+- `app/Http/Controllers/` - 12 個のコントローラ（各機能ごと）
+- `app/Services/` - 11 個のサービス（ビジネスロジック）
+- `app/Models/` - 9 個の Eloquent モデル
+- `app/Http/Middleware/` - RequestLogger のみ（ミドルウェア汎用は削除済）
+- `app/Traits/` - CommonFunctionsTrait, MstatsFunctionsTrait（共通ユーティリティ）
+- `app/Enums/` - BlankInList, CheckBox（定数と UI 値の管理）
+- `routes/web.php` - HTTP ルート定義（ミドルウェア登録なし）
+- `resources/views/` - Blade ビュー（`compact('request')` でデータ受け取り）
+- `database/` - マイグレーション / シーディング / SQLite DB
+- `tests/` - PHPUnit テスト
 
-## ルールと注意点
-- PHP 構文エラーを避けるため、ファイル頭に二重の `<?php` タグや末尾の不正文字が入らないよう注意。
-- 既存のビューが `compact('request')` を期待しているため、サービスは `$request` に必要なデータを `merge()` または `request->request->add()` する形で返す。
-- 大きなクエリや複雑な SQL を扱う場合は、DB 負荷と SQL インジェクションを考慮する（Eloquent の where 句はパラメタライズする）。
-- 共通関数は既存の Traits を使う。新しくユーティリティを作る場合は `app/Traits` に追加し再利用可能にする。
-- 既に移行済のサービスがある場合、それらを参考にする。命名規則は `<Feature>Service`、メソッドは `prepareIndexData`。
+## サービス層の標準パターン
+
+すべてのサービスは以下のパターンを踏襲します：
+
+```php
+// app/Services/TeamRankingService.php
+class TeamRankingService
+{
+    use CommonFunctionsTrait;
+    use MstatsFunctionsTrait;
+
+    public function prepareIndexData(Request $request): Request
+    {
+        // 1. クエリパラメータにデフォルト値を付与
+        $this->addQueryParameter($request, [
+            'season_id' => BlankInList::EXIST->value,
+            'match_category_id' => BlankInList::EXIST->value,
+        ]);
+
+        // 2. マスタデータを取得（Season, MatchCategory など）
+        $seasons = Season::query()->get();
+
+        // 3. ビジネスロジック（集計、ランキング生成など）
+        // ここで複雑な JOIN や集計を実行
+
+        // 4. リクエストにデータを merge して返す
+        return $request->merge([
+            'seasons' => $seasons,
+            'ranking' => $ranking,
+        ]);
+    }
+}
+```
+
+**重要なポイント：**
+- サービスは **リクエストを merge して返す** ことで、ビュー側で `compact('request')` から全データにアクセス可能
+- `addQueryParameter()` で null 安全なデフォルト値を処理
+- Trait から共通関数を呼び出す（自作ユーティリティは避ける）
+- 全ルートがこのパターンで統一されているため、新機能追加時も同じ構造を採用
+
+## 開発ワークフロー
+
+### 新機能追加（推奨フロー）
+
+1. **サービス作成**
+   ```bash
+   php artisan make:class Services/NewFeatureService
+   ```
+   - `prepareIndexData(Request $request): Request` を実装
+   - `CommonFunctionsTrait`, `MstatsFunctionsTrait` を use
+   - ビジネスロジック、DB クエリ、集計をここに集約
+
+2. **コントローラ作成**
+   ```bash
+   php artisan make:controller NewFeatureController --no-interaction
+   ```
+   - サービスをコンストラクタインジェクション
+   - `index()` でサービスの `prepareIndexData()` を呼ぶだけ
+
+3. **ルート追加** (`routes/web.php`)
+   ```php
+   Route::get('/new-feature', [NewFeatureController::class, 'index'])
+       ->name('new-feature');
+   ```
+
+4. **ビュー作成** (`resources/views/new-feature.blade.php`)
+   - `$request` から全データにアクセス：`$request->get('seasons')` 等
+
+5. **テスト追加**
+   ```bash
+   php artisan make:test Feature/NewFeatureTest
+   ```
+
+### 既存機能の修正
+- ビジネスロジック変更 → サービス内の対応メソッドを修正
+- UI変更のみ → ビュー（.blade.php）を修正
+- クエリ最適化 → サービス内の Eloquent クエリを改善
+
+## コーディング規約
+
+### PHP ファイル構造
+- 必ず `<?php` で開始（二重開始タグ厳禁）
+- 末尾に余計な空行や制御文字なし
+- 型ヒントとリターン型の明示必須
+- PHPDoc で public メソッドを記述
+
+### モデル定義
+- 自動採番でない主キーは `protected $primaryKey` で明示（例：`team_id`）
+- リレーションは `HasMany`, `HasOne`, `BelongsTo` で定義（戻り型含む）
+- 論理削除が必要な場合は `SoftDeletes` trait を使用
+- `$fillable` で mass assignment 対象を明示
+
+### ビュー統合
+- ビューは `compact('request')` でリクエストを受け取る
+- リクエストオブジェクトから `$request->get('key')` でアクセス
+- 日付表示は `MstatsFunctionsTrait::getWithWeekName()` を使用
+
+### エラーハンドリング
+- Eloquent クエリは eager loading で N+1 問題を回避
+- クエリパラメータは `addQueryParameter()` で null 安全に処理
+- 存在しないマスタデータは空コレクションなど安全な既定値を返す
 
 ## 便利なコード検索トークン
-- `prepareIndexData(`
-- `TeamPointChartService` `TeamStatsService` `TeamRankingService`
-- `AllPlayerRankingService` `SeasonPlayerRankingService`
-- `PlayerAffiliationService` `MatchScheduleService` `MatchResultService`
-- `CommonFunctionsTrait` `MstatsFunctionsTrait`
-- `compact('request')`
+- `prepareIndexData(` - サービスの標準メソッド
+- `CommonFunctionsTrait` - 共通処理トレイト
+- `MstatsFunctionsTrait` - 統計関連ユーティリティ
+- `compact('request')` - ビュー統合パターン
+- `addQueryParameter(` - デフォルト値付与
+- `BlankInList::EXIST->value` - UI 定数値
 
-## 開発用コマンド
-- 依存インストール: `composer install`
-- ローカル DB（sqlite）準備: `php artisan migrate --seed`（初回のみ）
-- 静的構文チェック: `php -l <file>` またはプロジェクト全体で `find . -name "*.php" -exec php -l {} ;` を使う
-- テスト実行: `vendor/bin/phpunit`（`composer test` スクリプトは未定義）
+## コマンド・デバッグ
 
-## テストと品質ゲート
-- 重要: 変更後は少なくとも該当機能のユニット/フィーチャーテストを一つ追加しておく（happy path と 1 つの境界ケース）。
-- 変更が複数ファイルに跨る場合（サービス + コントローラ + ルート + ミドルウェア削除）、コミットメッセージは明確に：
-  `Move <feature> request pre-processing from middleware to service; inject into controller; remove middleware`。
+**開発環境準備**
+```bash
+composer install                    # 依存インストール
+php artisan migrate --seed          # DB初期化（初回のみ）
+```
 
-## 典型的なエッジケース
-- リクエストのクエリパラメータが null/空のとき（デフォルト付与ロジックを services で正しく行う）。
-- 参照されるマスタデータが存在しない（例：シーズンやチームが空）場合の安全な既定値。
-- 大量のデータや長時間クエリ（ページングや eager loading を検討）
+**構文チェック・テスト**
+```bash
+php -l app/Services/NewFeatureService.php              # 単一ファイル構文チェック
+find app -name "*.php" -exec php -l {} +               # 全 PHP ファイル構文チェック
+php artisan test tests/Feature/NewFeatureTest.php      # 特定テスト実行
+php artisan test --filter=testMethodName               # テスト名フィルタ
+php artisan test                                        # 全テスト実行
+vendor/bin/pint --dirty                                # PHP コード整形（変更箇所のみ）
+```
 
-## 追加の注意
-- `TeamPointChartMiddleware.php` に関して：過去に二重 PHP 開始タグ等で構文エラーが発生したことがあります。編集前に必ずファイルの先頭と末尾を確認してください。
-- ユーザー（開発者）がファイルの編集を元に戻す場合があるため、自動的にファイルを削除する前に未コミットの変更や PR の意図を確認すること。
+**デバッグ・Tinker**
+```bash
+php artisan tinker                                     # PHP REPL（モデル確認等）
+```
 
----
+## 典型的なトラブルシューティング
 
-補足：このファイルは人間の開発者と AI 補助エージェントの橋渡し用の運用指示書です。必要に応じて更新してください（新しいパターンやルールを追加）。
-
-===
-
-<laravel-boost-guidelines>
+| 症状 | 原因 | 対策 |
+|------|------|------|
+| Parse error: syntax error | ファイル頭の二重 `<?php` など | ファイルの先頭・末尾を確認 |
+| Trying to get property of non-object | リクエスト内のキーが存在しない | `addQueryParameter()` でデフォルト値を確保 |
+| N+1 query problem | eager loading なし | Eloquent `with()` で関連モデルを先読み |
+| View error (undefined $request) | ビューへの受け渡し漏れ | `compact('request')` で全データを返却確認 |
 === foundation rules ===
 
 # Laravel Boost Guidelines
