@@ -64,6 +64,7 @@
                 <td @class([
                     'text-end',
                     'fw-bold',
+                    'text-danger' => $teamData['total_point'] < 0,
                 ])>
                     {{ number_format($teamData['total_point'], 1) }}
                 </td>
