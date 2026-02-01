@@ -40,6 +40,10 @@ route::get('/team-ranking', [TeamRankingController::class, 'index'])
 route::get('/team-monthly-point', [TeamMonthlyPointController::class, 'index'])
     ->name('team-monthly-point');
 
+// チーム月毎選手ポイント API
+route::get('/api/team-monthly-player-points', [TeamMonthlyPointController::class, 'getPlayerPoints'])
+    ->name('api.team-monthly-player-points');
+
 // チームスタッツ
 route::get('/team-stats', [TeamStatsController::class, 'index'])
     ->name('team-stats');
