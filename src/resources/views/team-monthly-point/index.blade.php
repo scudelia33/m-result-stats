@@ -3,6 +3,8 @@
         {{ __('TeamMonthlyPoint') }}
     </x-slot>
 
+    @vite(['resources/js/team-monthly-point-popover.js'])
+
     {{-- 検索条件 --}}
     <x-search-condition>
         {{-- シーズン --}}
@@ -48,10 +50,27 @@
 
                 {{-- 月毎のポイント --}}
                 @foreach ($request->months as $month)
+                    @php
+                        $monthParts = explode('/', $month);
+                        $year = (int)$monthParts[0];
+                        $monthNum = (int)$monthParts[1];
+                    @endphp
                     <td @class([
                         'text-end',
                         'text-danger' => $teamData['monthly_points'][$month]['point'] < 0,
-                    ])>
+                        'team-monthly-point-cell'
+                    ])
+                    style="cursor: pointer;"
+                    data-team-id="{{ $teamData['team_id'] }}"
+                    data-year="{{ $year }}"
+                    data-month="{{ $monthNum }}"
+                    data-season-id="{{ $request->season_id }}"
+                    data-match-category-id="{{ $request->match_category_id }}"
+                    data-bs-toggle="popover"
+                    data-bs-trigger="click"
+                    data-bs-placement="top"
+                    data-bs-html="true"
+                    tabindex="0">
                         @if ($teamData['monthly_points'][$month]['point'] == 0)
                             -
                         @else

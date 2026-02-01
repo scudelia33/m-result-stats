@@ -1,0 +1,57 @@
+// Team Monthly Point Popover styles
+.team-monthly-point-popover {
+    max-width: 500px;
+
+    .popover-body {
+        padding: 0;
+
+        .player-points-list {
+            font-size: 0.875rem;
+
+            .table {
+                margin-bottom: 0;
+
+                th {
+                    font-size: 0.8rem;
+                    padding: 0.5rem 0.5rem;
+                    background-color: var(--bs-light);
+                    position: sticky;
+                    top: 0;
+                    z-index: 1;
+                }
+
+                td {
+                    padding: 0.4rem 0.5rem;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+    }
+}
+
+.team-monthly-point-cell {
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}
+
+// Dark mode support
+[data-bs-theme="dark"] {
+    .team-monthly-point-popover {
+        .popover-body {
+            .player-points-list {
+                .table {
+                    th {
+                        background-color: var(--bs-dark);
+                    }
+                }
+            }
+        }
+    }
+
+    .team-monthly-point-cell {
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    }
+}

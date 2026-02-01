@@ -147,4 +147,62 @@ class TeamMonthlyPointService
             'teams' => $allTeams,
         ];
     }
+
+    /**
+     * 指定チーム・月の選手毎のポイントを取得する
+     *
+     * @param int $teamId
+     * @param int $year
+     * @param int $month
+     * @param int $seasonId
+     * @param int $matchCategoryId
+     * @return Collection
+     */
+    public function getPlayerPointsForMonth(int $teamId, int $year, int $month, int $seasonId, int $matchCategoryId): Collection
+    {
+        // 選手所属テーブル定義を取得
+        $playerAffiliation = $this->getDefinitionOfPlayerAffiliation($seasonId);
+
+        // 選手毎のポイントを集計
+        $playerPoints = MatchResult::select('match_results.player_id')
+            ->selectRaw('SUM(point) as point')
+            ->selectRaw('SUM(IFNULL(penalty, 0)) as penalty')
+            ->selectRaw('SUM(point + IFNULL(penalty, 0)) as net_point')
+            ->selectRaw('CONCAT(players.player_last_name, " ", players.player_first_name) as player_name')
+            ->selectRaw('SUM(CASE WHEN rank = 1 THEN 1 ELSE 0 END) as rank1')
+            ->selectRaw('SUM(CASE WHEN rank = 2 THEN 1 ELSE 0 END) as rank2')
+            ->selectRaw('SUM(CASE WHEN rank = 3 THEN 1 ELSE 0 END) as rank3')
+            ->selectRaw('SUM(CASE WHEN rank = 4 THEN 1 ELSE 0 END) as rank4')
+            ->join('match_information', 'match_results.match_id', '=', 'match_information.match_id')
+            ->joinSub($playerAffiliation, 'pa', function (JoinClause $join) {
+                $join->on('match_results.player_id', '=', 'pa.player_id_pa');
+            })
+            ->join('players', 'match_results.player_id', '=', 'players.player_id')
+            ->whereHas('matchInformation.matchSchedule', function ($query) use ($seasonId, $matchCategoryId) {
+                $query->when($seasonId != BlankInList::EXIST->value, function ($q) use ($seasonId) {
+                    $q->equalSeasonId($seasonId);
+                });
+                $query->when($matchCategoryId != BlankInList::EXIST->value, function ($q) use ($matchCategoryId) {
+                    $q->equalMatchCategoryId($matchCategoryId);
+                });
+            })
+            ->where('pa.team_id', $teamId)
+            ->whereYear('match_information.match_date', $year)
+            ->whereMonth('match_information.match_date', $month)
+            ->groupBy('match_results.player_id', 'players.player_last_name', 'players.player_first_name')
+            ->orderByDesc('net_point')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'player_id' => $item->player_id,
+                    'player_name' => $item->player_name,
+                    'point' => round($item->point, 1),
+                    'penalty' => round($item->penalty, 1),
+                    'net_point' => round($item->net_point, 1),
+                    'rank_detail' => sprintf('%d-%d-%d-%d', $item->rank1, $item->rank2, $item->rank3, $item->rank4),
+                ];
+            });
+
+        return $playerPoints;
+    }
 }
