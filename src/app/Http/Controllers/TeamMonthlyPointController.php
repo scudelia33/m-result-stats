@@ -64,9 +64,14 @@ class TeamMonthlyPointController extends Controller
         // 合計ポイントを計算
         $totalPoint = $playerPoints->sum('net_point');
 
+        // Bladeテンプレートでポップオーバーコンテンツを生成
+        $contentHtml = view('team-monthly-point.player-points-popover', [
+            'players' => $playerPoints->toArray(),
+        ])->render();
+
         return response()->json([
             'status' => 'success',
-            'data' => $playerPoints,
+            'content' => $contentHtml,
             'month' => sprintf('%04d/%02d', $validated['year'], $validated['month']),
             'team_name' => $teamName,
             'total_point' => round($totalPoint, 1),

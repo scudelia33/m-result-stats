@@ -55,35 +55,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 const data = cachedData;
-
-                let contentHtml = '';
-
-                if (data.data && data.data.length > 0) {
-                    contentHtml = '<div class="player-points-list" style="max-height: 300px; overflow-y: auto;">';
-                    contentHtml += '<table class="table table-sm table-hover mb-0">';
-                    contentHtml += '<thead><tr><th>選手</th><th class="text-end">ポイント</th></tr></thead>';
-                    contentHtml += '<tbody>';
-
-                    data.data.forEach(player => {
-                        const netPointClass = player.net_point < 0 ? 'text-danger' : '';
-                        contentHtml += '<tr>';
-                        contentHtml += `<td>${player.player_name}</td>`;
-                        contentHtml += `<td class="text-end fw-bold ${netPointClass}">${player.net_point.toFixed(1)}</td>`;
-                        contentHtml += '</tr>';
-                    });
-
-                    contentHtml += '</tbody>';
-                    contentHtml += '</table>';
-                    contentHtml += '</div>';
-                } else {
-                    contentHtml = '<div class="text-center text-muted">データがありません</div>';
-                }
-
+                
                 popoverInstance.dispose();
-
+                
                 popoverInstance = new bootstrap.Popover(popoverTriggerEl, {
                     title: `${data.team_name} - ${data.month}`,
-                    content: contentHtml,
+                    content: data.content,
                     html: true,
                     sanitize: false,
                     trigger: 'manual',
