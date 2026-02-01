@@ -5,6 +5,7 @@
                 <tr>
                     <th>選手</th>
                     <th class="text-end">ポイント</th>
+                    <th class="text-center">順位内訳</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,6 +19,7 @@
                         ])>
                             {{ number_format($player['net_point'], 1) }}
                         </td>
+                        <td class="text-center">{{ $player['rank_detail'] }}</td>
                     </tr>
                 @endforeach
             </tbody>

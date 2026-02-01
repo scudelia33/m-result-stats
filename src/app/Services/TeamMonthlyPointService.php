@@ -169,6 +169,10 @@ class TeamMonthlyPointService
             ->selectRaw('SUM(IFNULL(penalty, 0)) as penalty')
             ->selectRaw('SUM(point + IFNULL(penalty, 0)) as net_point')
             ->selectRaw('CONCAT(players.player_last_name, " ", players.player_first_name) as player_name')
+            ->selectRaw('SUM(CASE WHEN rank = 1 THEN 1 ELSE 0 END) as rank1')
+            ->selectRaw('SUM(CASE WHEN rank = 2 THEN 1 ELSE 0 END) as rank2')
+            ->selectRaw('SUM(CASE WHEN rank = 3 THEN 1 ELSE 0 END) as rank3')
+            ->selectRaw('SUM(CASE WHEN rank = 4 THEN 1 ELSE 0 END) as rank4')
             ->join('match_information', 'match_results.match_id', '=', 'match_information.match_id')
             ->joinSub($playerAffiliation, 'pa', function (JoinClause $join) {
                 $join->on('match_results.player_id', '=', 'pa.player_id_pa');
@@ -195,6 +199,7 @@ class TeamMonthlyPointService
                     'point' => round($item->point, 1),
                     'penalty' => round($item->penalty, 1),
                     'net_point' => round($item->net_point, 1),
+                    'rank_detail' => sprintf('%d-%d-%d-%d', $item->rank1, $item->rank2, $item->rank3, $item->rank4),
                 ];
             });
 
