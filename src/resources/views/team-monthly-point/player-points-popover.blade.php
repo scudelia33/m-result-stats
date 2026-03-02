@@ -14,7 +14,6 @@
                         <td>{{ $player['player_name'] }}</td>
                         <td @class([
                             'text-end',
-                            'fw-bold',
                             'text-danger' => $player['net_point'] < 0,
                         ])>
                             {{ number_format($player['net_point'], 1) }}
