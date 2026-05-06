@@ -905,6 +905,21 @@ class MatchScheduleSeeder extends Seeder
             ['match_date' => '2026-03-24', 'season_id' => 8, 'match_category_id' => 1,],
             ['match_date' => '2026-03-26', 'season_id' => 8, 'match_category_id' => 1,],
             ['match_date' => '2026-03-27', 'season_id' => 8, 'match_category_id' => 1,],
+            ['match_date' => '2026-04-06', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-07', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-09', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-10', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-13', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-14', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-16', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-17', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-20', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-21', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-23', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-24', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-27', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-28', 'season_id' => 8, 'match_category_id' => 2,],
+            ['match_date' => '2026-04-30', 'season_id' => 8, 'match_category_id' => 2,],
         ];
         MatchSchedule::insert($data);
     }
